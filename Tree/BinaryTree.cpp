@@ -110,9 +110,11 @@ void reverseLevelOrderTraversal(node *root)
     }
 }
 
-//Inorder :- LNR
-void inorderTraversal(node *root){
-    if(root == nullptr){
+// Inorder :- LNR
+void inorderTraversal(node *root)
+{
+    if (root == nullptr)
+    {
         return;
     }
     inorderTraversal(root->left);
@@ -120,9 +122,11 @@ void inorderTraversal(node *root){
     inorderTraversal(root->right);
 }
 
-//Preorder : NLR
-void preorderTraversal(node *root){
-     if(root == nullptr){
+// Preorder : NLR
+void preorderTraversal(node *root)
+{
+    if (root == nullptr)
+    {
         return;
     }
     cout << root->data << " ";
@@ -130,50 +134,116 @@ void preorderTraversal(node *root){
     preorderTraversal(root->right);
 }
 
-
-//Postorder : LRN
-void postorderTraversal(node *root){
-     if(root == nullptr){
+// Postorder : LRN
+void postorderTraversal(node *root)
+{
+    if (root == nullptr)
+    {
         return;
     }
 
     postorderTraversal(root->left);
     postorderTraversal(root->right);
     cout << root->data << " ";
-
 }
 
-void buildTreeFromLevelOrderTraversal(node *root){
+void buildTreeFromLevelOrderTraversal(node *root)
+{
     queue<node *> q;
     cout << "Enter the root node data: ";
     int data;
     cin >> data;
     root = new node(data);
-    if(data == -1)
+    if (data == -1)
     {
         return;
     }
     q.push(root);
-    while(!q.empty()){
+    while (!q.empty())
+    {
         node *temp = q.front();
         q.pop();
         cout << "Enter left child of " << temp->data << ": ";
         int left_data;
         cin >> left_data;
-        if(left_data!= -1){
+        if (left_data != -1)
+        {
             temp->left = new node(left_data);
             q.push(temp->left);
         }
         cout << "Enter right child of " << temp->data << ": ";
         int right_data;
         cin >> right_data;
-        if(right_data!= -1){
+        if (right_data != -1)
+        {
             temp->right = new node(right_data);
             q.push(temp->right);
         }
     }
+}
 
+void morrisTraversalInorder(node *root)
+{
+    node *cur = root;
+    while (cur != NULL)
+    {
+        if (cur->left == NULL)
+        {
+            cout << cur->data << " ";
+            cur = cur->right;
+        }
+        else
+        {
+            node *prev = cur->left;
+            while (prev->right && prev->right != cur)
+            {
+                prev = prev->right;
+            }
+            if (prev->right == NULL)
+            {
+                prev->right = cur;
+                cur = cur->left;
+            }
+            else
+            {
+                prev->right = NULL;
+                cout << cur->data << " ";
+                cur = cur->right;
+            }
+        }
+    }
+}
 
+void morrisTraversalPreorder(node *root)
+{
+    node *cur = root;
+    while (cur != NULL)
+    {
+        if (cur->left == NULL)
+        {
+            cout << cur->data << " ";
+            cur = cur->right;
+        }
+        else
+        {
+            node *prev = cur->left;
+            while (prev->right && prev->right != cur)
+            {
+                prev = prev->right;
+            }
+            if (prev->right == NULL)
+            {
+                prev->right = cur;
+                cout << cur->data << " ";
+                cur = cur->left;
+            }
+            else
+            {
+                prev->right = NULL;
+                cur = cur->right;
+            }
+        }
+    }
 }
 
 int main()
@@ -190,5 +260,9 @@ int main()
     preorderTraversal(root);
     cout << "\nPostorder traversal: ";
     postorderTraversal(root);
+    cout << "\nMorris traversal inorder: ";
+    morrisTraversalInorder(root);
+    cout << "\nMorris traversal preorder: ";
+    morrisTraversalPreorder(root);
     return 0;
 }
